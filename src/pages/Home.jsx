@@ -81,30 +81,13 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-4 py-20 sm:py-28">
           <div className="text-center">
-            <h1 className="text-[50px] sm:text-6xl lg:text-7xl font-600 font-figtree text-white mb-6 leading-tight">
+            <h1 className="text-[60px] sm:text-6xl lg:text-7xl mb-6 leading-tight">
               Quantum Mobiles
               </h1>
-              <p className="font-figtree text-[20px] ">
-                Tecnología que avanza contigo
+              <p className="text-[20px] mt-[-20px] ">
+                Tecnología que avanza <span className="underline">contigo</span>
               </p>
-            
-            <p className="text-xl sm:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Descubre la última tecnología móvil con precios increíbles y garantía total
-            </p>
-
-            {/* Barra de búsqueda */}
-            <div className="max-w-lg mx-auto mb-12">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Buscar tu smartphone ideal..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl border-0 shadow-xl text-lg focus:ring-4 focus:ring-blue-500/30 focus:outline-none"
-                />
-              </div>
-            </div>
+  
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button className="bg-white text-blue-900 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center space-x-2">
@@ -122,7 +105,7 @@ export default function Home() {
       {/* Características destacadas */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-4 sm:grid-cols-2 mt-[50px]">
             {features.map((feature, index) => (
               <div key={index} className="text-center group">
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:from-blue-600 group-hover:to-blue-700 transition-all duration-300">
@@ -140,13 +123,25 @@ export default function Home() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Productos Destacados</h2>
+            <h2 className="text-[30px] font-bold text-gray-900 mb-4">Productos Destacados</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Los smartphones más populares con las mejores ofertas del mercado
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* Barra de búsqueda */}
+      <div className="max-w-lg mx-auto mb-[30px]">
+          <div className="flex justify-start mt-[50px]">
+              <Search className="ml-[10px] top-1/2 transform -translate-y-[0px] text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Busca tu smartphone ideal..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-[300px] pl-[50px] pr-4 py-4 rounded-2xl border-0 shadow-xl text-lg focus:ring-4 focus:ring-blue-500/30 focus:outline-none"
+                />
+              </div>
+            </div>
+          <div className="grid grid-cols-3 sm:grid-cols-2 gap-[20px] p-[20px]">
             {(searchTerm ? filteredProducts : featuredPhones).map(product => (
               <ProductCard key={product.id} product={product} />
             ))}

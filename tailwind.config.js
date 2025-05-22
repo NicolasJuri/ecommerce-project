@@ -18,8 +18,8 @@ export default {
         'rojo-tierra': '#BE462A'
       },
       fontFamily: {
-        figtree: ["Figtree", "sans-serif"],
-        manrope: ["Manrope", "sans-serif"],
+        figtree: ['Figtree', 'sans-serif'],
+        manrope: ['Manrope', 'sans-serif'],
       },
       fontWeight: {
         200: 200,
