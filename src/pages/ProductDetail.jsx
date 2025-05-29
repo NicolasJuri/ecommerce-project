@@ -1,6 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ShoppingCart, Star, Heart, ArrowLeft, Shield, Truck, CreditCard } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import Cart from "../components/Cart";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -9,6 +11,7 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
+  const { isCartOpen, setIsCartOpen, addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -98,8 +101,8 @@ export default function ProductDetail() {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Breadcrumb */}
-        <div className="mb-8">
+          <div className="mb-8 flex items-center justify-between">
+          {/* Volver a productos */}
           <Link 
             to="/" 
             className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors"
@@ -107,7 +110,12 @@ export default function ProductDetail() {
             <ArrowLeft className="w-4 h-4" />
             <span>Volver a productos</span>
           </Link>
-        </div>
+          <button 
+          onClick={() => setIsCartOpen(true)} 
+          className="relative inline-flex items-center0 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
+            <ShoppingCart className="w-5 h-5" />
+          </button>
+          </div>
 
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 lg:p-12">
@@ -198,7 +206,12 @@ export default function ProductDetail() {
 
               {/* Botones de acción */}
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl">
+                <button 
+                onClick={() => {
+                  addToCart(product);
+                  setIsCartOpen(true);
+                }}
+                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl">
                   <ShoppingCart className="w-6 h-6" />
                   <span>Agregar al carrito</span>
                 </button>
@@ -375,6 +388,8 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
+    
   );
 }

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import useFetchProducts from "../hooks/useFetchProducts";
-import { Zap, Shield, Truck, CreditCard, ChevronRight, Search } from 'lucide-react';
+import { Zap, Shield, Truck, CreditCard, ChevronRight, Search, ShoppingCart } from 'lucide-react';
+import Cart from "../components/Cart";
+import { useCart } from "../../context/CartContext";
 
 export default function Home() {
   const { products, loading, error } = useFetchProducts();
   const [featuredPhones, setFeaturedPhones] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { isCartOpen, setIsCartOpen } = useCart();
 
   useEffect(() => {
     if (products.length > 0) {
@@ -72,6 +75,12 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <button 
+        onClick={() => setIsCartOpen(true)} 
+        className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
+      >
+        <ShoppingCart className="w-5 h-5" />
+      </button>
       <div className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -81,16 +90,16 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-4 py-20 sm:py-28">
           <div className="text-center">
-            <h1 className="text-[60px] sm:text-6xl lg:text-7xl mb-6 leading-tight">
-              Quantum Mobiles
-              </h1>
-              <p className="text-[20px] mt-[-20px] ">
+            <h1 className="text-[60px] sm:text-6xl lg:text-7xl mb-6 leading-tight text-white">
+                Quantum Mobiles
+            </h1>
+              <p className="text-[20px] text-white mb-10">
                 Tecnología que avanza <span className="underline">contigo</span>
               </p>
   
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="bg-white text-blue-900 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center space-x-2">
+              <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 hover:text-blue-900 transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center space-x-2">
                 <span>Ver Ofertas</span>
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -105,7 +114,7 @@ export default function Home() {
       {/* Características destacadas */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-4 sm:grid-cols-2 mt-[50px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
             {features.map((feature, index) => (
               <div key={index} className="text-center group">
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:from-blue-600 group-hover:to-blue-700 transition-all duration-300">
@@ -123,43 +132,54 @@ export default function Home() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-[30px] font-bold text-gray-900 mb-4">Productos Destacados</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Productos Destacados
+            </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Los smartphones más populares con las mejores ofertas del mercado
+              Únicos, <span className="text-[#2563eb] font-bold">como vos</span>
             </p>
           </div>
-                {/* Barra de búsqueda */}
-      <div className="max-w-lg mx-auto mb-[30px]">
-          <div className="flex justify-start mt-[50px]">
-              <Search className="ml-[10px] top-1/2 transform -translate-y-[0px] text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Busca tu smartphone ideal..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-[300px] pl-[50px] pr-4 py-4 rounded-2xl border-0 shadow-xl text-lg focus:ring-4 focus:ring-blue-500/30 focus:outline-none"
-                />
-              </div>
+
+          {/* Barra de búsqueda */}
+          <div className="max-w-lg mx-auto mb-8">
+            <div className="relative">
+              <Search 
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" 
+              />
+              <input
+                type="text"
+                placeholder="Busca tu smartphone ideal..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 rounded-2xl border-0 shadow-xl text-lg
+                     focus:ring-4 focus:ring-blue-500/30 focus:outline-none"
+              />
             </div>
-          <div className="grid grid-cols-3 sm:grid-cols-2 gap-[20px] p-[20px]">
+          </div>
+
+          {/* Grid de productos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {(searchTerm ? filteredProducts : featuredPhones).map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-          
+
+          {/* Mensaje de no resultados */}
           {searchTerm && filteredProducts.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-xl text-gray-600 mb-4">No encontramos productos que coincidan con "{searchTerm}"</p>
+              <p className="text-xl text-gray-600 mb-4">
+                No encontramos productos que coincidan con “{searchTerm}”
+              </p>
               <button 
                 onClick={() => setSearchTerm('')}
-                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
-              >
+                className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors">
                 Ver todos los productos
               </button>
             </div>
           )}
         </div>
       </section>
+
 
       {/* Marcas */}
       <section className="py-16 bg-white">
@@ -181,7 +201,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Banner de Oferta Mejorado */}
+      {/* Banner de Oferta */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-3xl overflow-hidden shadow-2xl">
@@ -223,7 +243,7 @@ export default function Home() {
       </section>
 
       {/* Newsletter */}
-      <section className="py-16 bg-gray-900">
+      <section className="py-16 bg-gray-900 ">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold text-white mb-4">
             ¿No quieres perderte nuestras ofertas?
@@ -242,7 +262,15 @@ export default function Home() {
             </button>
           </div>
         </div>
+        <div className="lg:relative flex justify-center lg:justify-end lg:top-10 mt-10">
+        <p className="text-white text-sm text-end mt-5 mr-5">
+              Desarrollado por <a href="https://github.com/NicolasJuri" className="underline">Nicolas Ismael Juri</a>
+            </p>
+        </div>
       </section>
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
+    
   );
+  
 }

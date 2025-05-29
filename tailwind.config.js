@@ -10,13 +10,6 @@ export default {
       screens: {
         'xs': '430px',
       },
-      colors: {
-        'verde': '#17371F',
-        'dorado': '#EBC688',
-        'beige': '#F4F1E8',
-        'verde-pastel': '#D0E1BE',
-        'rojo-tierra': '#BE462A'
-      },
       fontFamily: {
         figtree: ['Figtree', 'sans-serif'],
         manrope: ['Manrope', 'sans-serif'],

@@ -36,7 +36,7 @@
     "title": "OPPO Terrain Edition",
     "price": 649.99,
     "description": "Edición especial resistente a polvo y agua, con carga súper rápida de 65W y cámara Sony IMX766 de 50MP.",
-    "image": "/images/oppo-terrain.webp",
+    "image": "/images/oppo.webp",
     "brand": "OPPO"
   },
   {
@@ -78,5 +78,13 @@
     "description": "Cámara de 108MP, pantalla DotDisplay de 90Hz y carga rápida de 67W. El mejor costo-beneficio del mercado.",
     "image": "/images/xiaomi-fairtex3.png",
     "brand": "Xiaomi"
+  },
+  {
+    "id": 11,
+    "title": "PlegaByte Xcare",
+    "price": 1419.99,
+    "description": "Pantalla Ultimate View totalmente plegable, 40GB de ram, cámara doble de 250MP, batería de 6000mAh y carga rápida de 100W.",
+    "image": "/images/plegaByte.jpg",
+    "brand": "PlegaByte"
   }
 ]

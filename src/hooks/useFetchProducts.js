@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Star, Zap, Shield, Truck, CreditCard, ChevronRight, Heart, Search } from 'lucide-react';
 
 // Hook personalizado para cargar productos
 const useFetchProducts = () => {

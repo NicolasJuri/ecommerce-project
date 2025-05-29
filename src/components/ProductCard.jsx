@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Star, Heart } from 'lucide-react';
+import { useCart } from '../../context/CartContext';  
 
 export default function ProductCard({ product, className = "" }) {
   const [isLiked, setIsLiked] = useState(false);
-  
-  // Generar rating aleatorio para productos reales (puedes quitar esto si tienes ratings reales)
+  const [isAdding, setIsAdding] = useState(false);
+  const { addToCart, setIsCartOpen } = useCart();
+
+  // Generar rating aleatorio 
   const rating = (4.2 + Math.random() * 0.7).toFixed(1);
   const reviews = Math.floor(Math.random() * 2000) + 100;
   
@@ -18,9 +21,22 @@ export default function ProductCard({ product, className = "" }) {
       'Motorola': ['#2c3e50', '#3498db', '#e74c3c', '#f39c12'],
       'OPPO': ['#000000', '#ffffff', '#9b59b6', '#2ecc71'],
       'Ryzer': ['#e74c3c', '#34495e', '#f39c12', '#9b59b6'],
-      'Aureox': ['#3498db', '#2ecc71', '#e67e22', '#8e44ad']
+      'Aureox': ['#3498db', '#2ecc71', '#e67e22', '#8e44ad'],
+      'PlegaByte': ['#3498db', '#2ecc71', '#e67e22', '#8e44ad']
     };
     return colorMap[brand] || ['#34495e', '#95a5a6', '#3498db', '#e74c3c'];
+  };
+
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    try {
+      await addToCart(product);
+      setIsCartOpen(true);
+    } catch (error) {
+      console.error("Error al agregar al carrito:", error);
+    } finally {
+      setTimeout(() => setIsAdding(false), 500);
+    }
   };
 
   return (
@@ -29,6 +45,7 @@ export default function ProductCard({ product, className = "" }) {
       <button 
         onClick={() => setIsLiked(!isLiked)}
         className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
+        aria-label={isLiked ? "Quitar de favoritos" : "Agregar a favoritos"}
       >
         <Heart className={`w-4 h-4 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
       </button>
@@ -40,6 +57,7 @@ export default function ProductCard({ product, className = "" }) {
             src={product.image} 
             alt={product.title}
             className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
           />
           
           {/* Overlay con colores disponibles */}
@@ -49,6 +67,7 @@ export default function ProductCard({ product, className = "" }) {
                 key={index}
                 className="w-4 h-4 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform"
                 style={{ backgroundColor: color }}
+                aria-label={`Color ${index + 1}`}
               />
             ))}
           </div>
@@ -85,14 +104,26 @@ export default function ProductCard({ product, className = "" }) {
             </span>
           </div>
           
-          <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl">
-            <ShoppingCart className="w-4 h-4" />
-            <span>Comprar</span>
-          </button>
+          <button 
+          onClick={handleAddToCart}
+          disabled={isAdding}
+          className={`bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 shadow-lg hover:shadow-xl ${
+            isAdding ? 'opacity-75 cursor-not-allowed' : ''
+          }`}
+          aria-label={`Agregar ${product.title} al carrito`}
+        >
+          {isAdding ? (
+            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          ) : (
+            <>
+              <ShoppingCart className="w-4 h-4" />
+              <span>Comprar</span>
+            </>
+          )}
+        </button>
         </div>
       </div>
 
-      {/* Efecto hover adicional */}
       <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl pointer-events-none transition-all duration-300"></div>
     </div>
   );
