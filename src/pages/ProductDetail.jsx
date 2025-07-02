@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ShoppingCart, Star, Heart, ArrowLeft, Shield, Truck, CreditCard } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import Cart from "../components/Cart";
+import { Helmet } from "react-helmet";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -101,6 +102,10 @@ export default function ProductDetail() {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4">
+        <Helmet>
+          <title>{product.title} - Quantum Mobiles</title>
+          <meta name="description" content={product.description} />
+        </Helmet>
           <div className="mb-8 flex items-center justify-between">
           {/* Volver a productos */}
           <Link 

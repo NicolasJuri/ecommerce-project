@@ -4,6 +4,7 @@ import useFetchProducts from "../hooks/useFetchProducts";
 import { Zap, Shield, Truck, CreditCard, ChevronRight, Search, ShoppingCart } from 'lucide-react';
 import Cart from "../components/Cart";
 import { useCart } from "../../context/CartContext";
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   const { products, loading, error } = useFetchProducts();
@@ -75,6 +76,10 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>Quantum Mobiles</title>
+        <meta name="description" content="Quantum Mobiles es una tienda de celulares que ofrece los mejores precios y calidad." />
+      </Helmet>
       <button 
         onClick={() => setIsCartOpen(true)} 
         className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
