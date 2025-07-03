@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
@@ -51,9 +51,16 @@ export default function Login() {
          {error && <p className="text-red-500 mb-5">{error}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
         >
           Ingresar
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="w-full bg-blue-600 text-white mt-2 p-2 rounded hover:bg-blue-700 transition"
+        >
+          Volver al home
         </button>
       </form>
     </div>

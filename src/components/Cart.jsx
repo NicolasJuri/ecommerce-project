@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 
 export default function Cart() {
@@ -71,7 +71,7 @@ export default function Cart() {
                 cart.map(item => (
                   <div key={item.id} className="flex gap-4 border-b pb-4">
                     <img 
-                      src={item.image} 
+                      src={item.images?.[0]} 
                       alt={item.title} 
                       className="w-20 h-20 object-contain"
                     />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Star, Heart } from 'lucide-react';
-import { useCart } from '../../context/CartContext';  
+import { useCart } from '../context/CartContext';  
 
 export default function ProductCard({ product, className = "" }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -54,7 +54,7 @@ export default function ProductCard({ product, className = "" }) {
       <Link to={`/product/${product.id}`}>
         <div className="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6 overflow-hidden cursor-pointer">
           <img 
-            src={product.image} 
+            src={product.images?.[0]} 
             alt={product.title}
             className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
             loading="lazy"

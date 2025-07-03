@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
-import useFetchProducts from "../hooks/useFetchProducts";
-import { Zap, Shield, Truck, CreditCard, ChevronRight, Search, ShoppingCart } from 'lucide-react';
+import { Zap, Shield, Truck, CreditCard, ChevronRight, Search, ShoppingCart, User, ArrowRight } from 'lucide-react';
 import Cart from "../components/Cart";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../context/CartContext";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
+import { useProducts } from "../context/ProductContext";
+import Footer from "../components/Footer";
 
 export default function Home() {
-  const { products, loading, error } = useFetchProducts();
+  const navigate = useNavigate();
+  const { products, loading, error } = useProducts();
   const [featuredPhones, setFeaturedPhones] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const { isCartOpen, setIsCartOpen } = useCart();
 
+
+
   useEffect(() => {
     if (products.length > 0) {
-      setFeaturedPhones(products.slice(0, 8));
+      setFeaturedPhones(products.slice(0, 6));
     }
   }, [products]);
+
 
   // Filtrar productos por búsqueda
   const filteredProducts = products.filter(product =>
@@ -75,6 +81,7 @@ export default function Home() {
   ];
 
   return (
+    <>
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
         <title>Quantum Mobiles</title>
@@ -82,9 +89,15 @@ export default function Home() {
       </Helmet>
       <button 
         onClick={() => setIsCartOpen(true)} 
-        className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
+        className="fixed top-4 right-[80px] z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
       >
         <ShoppingCart className="w-5 h-5" />
+      </button>
+      <button 
+        onClick={() => navigate('/login')} 
+        className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition"
+      >
+        <User className="w-5 h-5" />
       </button>
       <div className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 overflow-hidden">
         <div className="absolute inset-0">
@@ -182,6 +195,12 @@ export default function Home() {
               </button>
             </div>
           )}
+          <button 
+            onClick={() => navigate('/products')} 
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors mt-10 flex items-center justify-center"
+          >
+            Ver más <ArrowRight className="ml-2 w-4 h-4" />
+          </button>
         </div>
       </section>
 
@@ -222,7 +241,7 @@ export default function Home() {
                   <button className="bg-white text-orange-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Comprar Ahora
                   </button>
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300">
+                  <button className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300" onClick={() => navigate('/products')}>
                     Ver Todos
                   </button>
                 </div>
@@ -247,35 +266,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-16 bg-gray-900 ">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            ¿No quieres perderte nuestras ofertas?
-          </h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Suscríbete y recibe las mejores promociones directamente en tu email
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-            <input
-              type="email"
-              placeholder="Tu email aquí..."
-              className="flex-1 px-6 py-4 rounded-2xl border-0 focus:ring-4 focus:ring-blue-500/30 focus:outline-none text-lg"
-            />
-            <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105">
-              Suscribirse
-            </button>
-          </div>
-        </div>
-        <div className="lg:relative flex justify-center lg:justify-end lg:top-10 mt-10">
-        <p className="text-white text-sm text-end mt-5 mr-5">
-              Desarrollado por <a href="https://github.com/NicolasJuri" className="underline">Nicolas Ismael Juri</a>
-            </p>
-        </div>
-      </section>
+
       <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
-    
+    <Footer />
+    </>
   );
   
 }

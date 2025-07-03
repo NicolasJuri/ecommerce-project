@@ -1,13 +1,19 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ShoppingCart, Star, Heart, ArrowLeft, Shield, Truck, CreditCard } from 'lucide-react';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../context/CartContext';
 import Cart from "../components/Cart";
 import { Helmet } from "react-helmet";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
+
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -17,56 +23,89 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch("/products.json");
+        const response = await fetch(`https://68648daa5b5d8d03397d7e7d.mockapi.io/products/${id}`);
         if (!response.ok) {
           throw new Error('Error al cargar el producto');
         }
         const data = await response.json();
-        const found = data.find(p => p.id === parseInt(id));
-        if (!found) {
-          throw new Error('Producto no encontrado');
-        }
-        setProduct(found);
+        setProduct(data);
+        setMainImage(data.images?.[0] || data.image || "");
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchProduct();
   }, [id]);
 
-  // Generar colores basados en la marca
-  const getBrandColors = (brand) => {
-    const colorMap = {
-      'Apple': [
-        { name: 'Grafito', color: '#1a1a1a' },
-        { name: 'Oro Rosa', color: '#c9ada7' },
-        { name: 'Azul Sierra', color: '#8ecae6' },
-        { name: 'Rosa', color: '#ffb3ba' }
+  const getProductColors = (product) => {
+    // Definimos colores específicos por modelo exacto
+    const modelColors = {
+      'Apple iPhone G6 (128GB)': [
+        { name: 'Arena', color: '#F2E9CD' },
+        { name: 'Rosa', color: '#f4acd9' },
+        { name: 'Rojo', color: '#e43c3c' }
       ],
-      'Samsung': [
-        { name: 'Negro Fantasma', color: '#1a1a1a' },
-        { name: 'Bronce', color: '#8b5a3c' },
-        { name: 'Azul Místico', color: '#4a5c6a' },
-        { name: 'Oro', color: '#d4af37' }
+      'Apple iPhone G8 Pro (256GB)': [
+        { name: 'Negro mate', color: '#474644' },
+        { name: 'Arena', color: '#F2E9CD' },
+        { name: 'Naranja metalizada', color: ' #ecb271' },
       ],
-      'Xiaomi': [
-        { name: 'Negro Medianoche', color: '#000000' },
-        { name: 'Blanco Lunar', color: '#ffffff' },
-        { name: 'Azul Océano', color: '#4a90e2' },
-        { name: 'Verde Esmeralda', color: '#50c878' }
-      ]
+      'Infinix X9 + Auriculares (Infinix model FreeBuds s7)': [
+        { name: 'Gris Claro', color: ' #dcd5cf' },
+        { name: 'Negro mate', color: ' #333c4d' },
+        { name: 'Purpura suave', color: '#dcd0f9' },
+      ],
+      'Motorola K10 Power': [
+        { name: 'Verde selvatico', color: '#ced7bf' },
+        { name: 'Negro mate', color: '#333c4d' },
+        { name: 'Rosa metalizado', color: ' #ddbedb' }
+      ],
+      'OPPO Terrain Edition': [
+        { name: 'Marmol', color: ' #ebece8' },
+        { name: 'Militar edition', color: ' #4e6d58' },
+        { name: 'Rosa bebe', color: ' #f2e3e3' }
+      ],
+      'Ryzer T5 Gaming': [
+        { name: 'Blanco mate', color: '#e4e7eb' },
+        { name: 'Negro metalizado', color: ' #131419' }
+      ],
+      'Samsung Galaxy A54 5G': [
+        { name: 'Blanco brillante', color: '#f5f5f5' },
+        { name: 'Negro mate', color: ' #333c4d' },
+        { name: 'Grape edition', color: '#918fd7' },
+        { name: 'Lima edition', color: ' #e3f4c4' }
+      ],
+      'Samsung Galaxy S23 FE': [
+        { name: 'Negro brillante', color: '#131419' },
+      ],
+      'Samsung Connect 8 Tablet': [
+        { name: 'Negro brillante', color: '#131419' },
+        { name: 'Verde azulado', color: '#8dadb9' },
+        { name: 'Champagne', color: '#af9796' },
+      ],
+      'Xiaomi Redmi 3 Pro': [
+        { name: 'Verde Naturaleza', color: '#98b88f' },
+        { name: 'Azul Marino', color: '#9ac1c8' },
+        { name: 'Purpura mate', color: '#8a9cbf' },
+        { name: 'Blanco mate', color: '#d1d3e3' },
+        { name: 'Verde azulado', color: '#8dadb9' }
+      ],
+      'PlegaByte Xcare': [
+        { name: 'Rojo mate', color: '#852d2c' },
+        { name: 'Negro mate', color: '#454545' },
+      ],
     };
-    return colorMap[brand] || [
-      { name: 'Negro', color: '#34495e' },
-      { name: 'Gris', color: '#95a5a6' },
-      { name: 'Azul', color: '#3498db' },
-      { name: 'Rojo', color: '#e74c3c' }
+
+    return modelColors[product.title] || [
+      { name: 'Negro', color: '#000000' },
+      { name: 'Blanco', color: '#ffffff' },
+      { name: 'Rojo', color: '#e43c3c' },
+      { name: 'Verde', color: '#a0d6b4' }
     ];
   };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -95,7 +134,7 @@ export default function ProductDetail() {
     );
   }
 
-  const colors = getBrandColors(product.brand);
+    const colors = getProductColors(product);
   const rating = (4.2 + Math.random() * 0.7).toFixed(1);
   const reviews = Math.floor(Math.random() * 2000) + 100;
 
@@ -126,22 +165,32 @@ export default function ProductDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 lg:p-12">
             {/* Imagen del producto */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 h-96 lg:h-full flex items-center justify-center relative overflow-hidden">
-                <img 
-                  src={product.image} 
-                  alt={product.title}
-                  className="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105"
-                />
-                
-                {/* Botón de favoritos */}
-                <button 
-                  onClick={() => setIsLiked(!isLiked)}
-                  className="absolute top-6 right-6 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
-                >
-                  <Heart className={`w-6 h-6 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
-                </button>
-              </div>
+      <Swiper
+        navigation
+        modules={[Navigation]}
+        className="w-full lg:h-[650px] rounded-2xl bg-gray-100"
+      >
+        {Array.isArray(product.images) && product.images.map((img, index) => (
+          <SwiperSlide key={index}>
+            <div className="flex items-center justify-center h-full p-4">
+              <img
+                src={img}
+                alt={`${product.title} ${index + 1}`}
+                className="object-contain max-h-full max-w-full"
+              />
             </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Botón de favoritos */}
+      <button 
+        onClick={() => setIsLiked(!isLiked)}
+        className="absolute top-6 right-6 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 z-10"
+      >
+        <Heart className={`w-6 h-6 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+      </button>
+    </div>
 
             {/* Información del producto */}
             <div className="flex flex-col justify-center">
