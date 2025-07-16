@@ -65,14 +65,11 @@ Quantum Mobiles es un eCommerce de celulares diseñado con React, Context API y 
 git clone https://github.com/tuusuario/quantum-mobiles.git
 cd quantum-mobiles
 ```
-
+2. Instala dependencias:
 ```bash
-Instala dependencias:
 npm install
 ```
-
+3. Inicia el servidor:
 ```bash
-Inicia el servidor:
-
 npm run dev
 ```
