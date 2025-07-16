@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import Footer from "../components/Footer";
+import BannerSale from "../components/BannerSale";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -117,12 +118,13 @@ export default function Home() {
   
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 hover:text-blue-900 transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center space-x-2">
+              <button   onClick={() => {
+    document.getElementById('oferta').scrollIntoView({ 
+      behavior: 'smooth' 
+    });
+  }} className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 hover:text-blue-900 transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center space-x-2">
                 <span>Ver Ofertas</span>
                 <ChevronRight className="w-5 h-5" />
-              </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-blue-900 transition-all duration-300 transform hover:scale-105">
-                Comparar Modelos
               </button>
             </div>
           </div>
@@ -226,44 +228,8 @@ export default function Home() {
       </section>
 
       {/* Banner de Oferta */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-3xl overflow-hidden shadow-2xl">
-            <div className="flex flex-col lg:flex-row items-center p-8 lg:p-12">
-              <div className="lg:w-1/2 text-center lg:text-left mb-8 lg:mb-0">
-                <h3 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-                  ¡Oferta Especial!
-                </h3>
-                <p className="text-xl text-white/90 mb-6 leading-relaxed">
-                  Hasta 40% de descuento en modelos seleccionados. Aprovecha esta oportunidad única.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <button className="bg-white text-orange-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                    Comprar Ahora
-                  </button>
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-orange-600 transition-all duration-300" onClick={() => navigate('/products')}>
-                    Ver Todos
-                  </button>
-                </div>
-              </div>
-              <div className="lg:w-1/2 flex justify-center">
-                <div className="relative">
-                  <div className="bg-white/20 backdrop-blur-sm w-80 h-80 rounded-2xl flex items-center justify-center">
-                    {/* Mostrar imagen del primer producto destacado */}
-                    <img 
-                      src={featuredPhones[0]?.image || "/api/placeholder/250/300"} 
-                      alt="Oferta especial" 
-                      className="w-48 h-60 object-contain"
-                    />
-                  </div>
-                  <div className="absolute -top-4 -right-4 bg-red-500 text-white text-2xl font-bold w-16 h-16 rounded-full flex items-center justify-center shadow-xl animate-pulse">
-                    40%
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="py-16 px-4" id="oferta">
+        <BannerSale />
       </section>
 
 

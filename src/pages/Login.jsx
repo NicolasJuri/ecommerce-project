@@ -4,63 +4,110 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, loading, error: authError } = useAuth(); 
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [localError, setLocalError] = useState(""); 
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
-    const success = login(form);
-    if (success) navigate("/admin");
-    else setError("Credenciales inválidas");
+    setLocalError(""); 
+    
+    if (!form.email || !form.password) {
+      setLocalError("Todos los campos son obligatorios");
+      return;
+    }
+
+    try {
+      const success = await login(form.email, form.password);
+      if (success) {
+        navigate("/admin");
+      }
+    } catch (err) {
+      setLocalError(err.message || "Credenciales inválidas");
+    }
   };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
       <Helmet>
         <title>Quantum Mobiles - Iniciar Sesión</title>
-        <meta name="description" content="Inicia sesión en Quantum Mobiles para acceder a tu cuenta y comprar los mejores celulares." />
+        <meta 
+          name="description" 
+          content="Inicia sesión en Quantum Mobiles para acceder a tu cuenta y comprar los mejores celulares." 
+        />
       </Helmet>
+      
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-4">Iniciar Sesión</h2>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full border p-2 rounded mb-4"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full border p-2 rounded mb-4"
-          required
-        />
-         {error && <p className="text-red-500 mb-5">{error}</p>}
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Iniciar Sesión</h2>
+        
+        {localError && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+            {localError}
+          </div>
+        )}
+        
+        {authError && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
+            {authError}
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="tu@email.com"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+          disabled={loading}
+          className={`w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
-          Ingresar
+          {loading ? "Cargando..." : "Ingresar"}
         </button>
+
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="w-full bg-blue-600 text-white mt-2 p-2 rounded hover:bg-blue-700 transition"
+          className="w-full mt-3 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
         >
-          Volver al home
+          Volver al inicio
         </button>
       </form>
     </div>

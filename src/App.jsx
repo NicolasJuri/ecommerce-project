@@ -12,10 +12,10 @@ import ProductsPage from './pages/ProductsPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <ProductProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          <ProductProvider>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<Home />} />
@@ -32,10 +32,10 @@ function App() {
               
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </ProductProvider>
-      </CartProvider>
-    </AuthProvider>
+          </ProductProvider>
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
