@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // URL de tu endpoint en MockAPI
+  // URL del endpoint en MockAPI
   const API_URL = "https://68648daa5b5d8d03397d7e7d.mockapi.io/users";
 
   // Función para login
@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
         name: userFound.name
       };
       
-      // Guardar en localStorage (considera usar sessionStorage para más seguridad)
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
       return true;
