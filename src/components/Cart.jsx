@@ -58,7 +58,7 @@ export default function Cart() {
           <>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Tu Carrito ({cart.length})</h2>
-              <button onClick={() => setIsCartOpen(false)} className="relative bottom-1 text-gray-500 hover:text-black z-50 mr-[55px]">
+              <button onClick={() => setIsCartOpen(false)} className="relative  bottom-1 text-gray-500 hover:text-black z-50 mr-[120px] lg:mr-[55px]">
                 <X className="w-6 h-6 text-gray-500 hover:text-black" />
               </button>
             </div>
