@@ -213,7 +213,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Explora por Marca</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {uniqueBrands.slice(0, 8).map((brand, index) => (
-              <div key={index} className={`bg-gradient-to-br ${getBrandGradient(brand)} rounded-2xl p-8 text-center hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl`}>
+              <div key={index} onClick={() => navigate('/products')} className={`bg-gradient-to-br ${getBrandGradient(brand)} rounded-2xl p-8 text-center hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl`}>
                 <div className="bg-white rounded-xl w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                   <span className="text-2xl font-bold text-gray-700">{brand.charAt(0)}</span>
                 </div>
